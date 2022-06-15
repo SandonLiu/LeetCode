@@ -9,7 +9,8 @@ public class No7_buildTree {
 	// 中序遍历 -> 左 根 右
 	// 后序遍历 -> 左 右 根
 
-	private static Map<Integer, Integer> inorderMap;
+	// 中序遍历结果的哈希映射 < 值 -> 下标 >
+	private static Map<Integer, Integer> inOrderMap;
 
 	/**
 	 * 递归法建造二叉树
@@ -33,7 +34,7 @@ public class No7_buildTree {
 		int preorder_root = preorder_left;
 		// 根据前序遍历的根节点的值，在中序遍历中找到中序遍历根节点的下标
 		int root_val = preorder[preorder_root];
-		int inorder_root = inorderMap.get(root_val);
+		int inorder_root = inOrderMap.get(root_val);
 		// 先把根节点创建出来
 		TreeNode root = new TreeNode(root_val);
 
@@ -63,13 +64,22 @@ public class No7_buildTree {
 	 * @return 二叉树
 	 */
 	public static TreeNode buildTree(int[] preorder, int[] inorder) {
-		int n = preorder.length;
-		// 构造哈希映射，帮助我们快速定位根节点
-		inorderMap = new HashMap<Integer, Integer>();
-		for (int i = 0; i < n; i++) {
-			inorderMap.put(inorder[i], i);
+
+		// 将中序遍历结果的数组转化为哈希映射
+		inOrderMap = new HashMap<Integer, Integer>();
+		for (int i = 0; i < preorder.length; i++) {
+			inOrderMap.put(inorder[i], i);
 		}
-		return myBuildTree(preorder, inorder, 0, n - 1, 0, n - 1);
+
+		// 设定递归初始值
+		int initial_preorder_left = 0;
+		int initial_preorder_right = preorder.length - 1;
+		int initial_inorder_left = 0;
+		int initial_inorder_right = preorder.length - 1;
+
+		// 开始递归
+		return myBuildTree(preorder, inorder, initial_preorder_left, initial_preorder_right, initial_inorder_left,
+				initial_inorder_right);
 	}
 
 	/**
@@ -79,7 +89,7 @@ public class No7_buildTree {
 	 */
 	public static void main(String[] args) {
 
-		// 输入
+		// 输入前序遍历结果,中序遍历结果
 		int[] preorder = { 3, 9, 20, 15, 7 };
 		int[] inorder = { 9, 3, 15, 20, 7 };
 
