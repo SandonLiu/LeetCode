@@ -32,22 +32,22 @@ public class No9_implQueueBy2Stacks {
 	public int deleteHead() {
 
 		// 若队列中没有元素，操作返回-1
-		if (saveStack.isEmpty()) {
+		if (saveStack.isEmpty() && tempStack.isEmpty()) {
 			return -1;
 		}
 
-		// 这段代码非常重要！！！
-		// 用于第二次删除头部元素
+		// 第一次删除头部元素时
 		if (tempStack.isEmpty()) {
-			return tempStack.removeLast();
+			// 把saveStack中的元素出栈到tempStack中
+			while (!saveStack.isEmpty()) {
+				tempStack.addLast(saveStack.removeLast());
+			}
 		}
 
-		// 把saveStack中的元素出栈到tempStack中
-		while (!saveStack.isEmpty()) {
-			tempStack.addLast(saveStack.removeLast());
-		}
-		// 此时saveStack已经没有元素，让tempStack最后元素出栈
+		// 对于第一次，此时saveStack已经没有元素，让tempStack最后元素出栈
+		// 对于第二次，让当前的tempStack最后元素出栈
 		return tempStack.removeLast();
+
 	}
 
 }
